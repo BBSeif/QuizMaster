@@ -33,6 +33,8 @@ public class Question {
     @Column(name = "ans")
     private String ans;
 
+    public Question(){}
+
     public Question(String question, String a, String b, String c, String d, String e, String ans) {
         this.question = question;
         this.a = a;

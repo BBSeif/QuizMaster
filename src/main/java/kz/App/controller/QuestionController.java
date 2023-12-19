@@ -3,8 +3,10 @@ package kz.App.controller;
 import kz.App.entity.Question;
 import kz.App.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -13,18 +15,32 @@ public class QuestionController {
     @Autowired
     private QuestionService qService;
 
-    @GetMapping("/")
-    public  String mainPage(){
-        return "Hello Guys!";
+//    @GetMapping("/")
+//    public  String mainPage(){
+//        return "Hello Guys!";
+//    }
+
+    @GetMapping("/getQuestion")
+    public String getQuestion(@PathVariable Long id, Model model) {
+        Question question = qService.getQuestionById(id);
+        model.addAttribute("questions",question);
+        return "QuestionList";
     }
 
-    @GetMapping("/getQwestion")
-    public Question getQuestion(@PathVariable Long id) {
-        return qService.getQuestionById(id);
+    @GetMapping("/getAllQuestions")
+    public String getAllQuestions(Model model) {
+        List<Question> questionList = qService.getAllQuestions();
+        model.addAttribute("questions",questionList);
+        return "QuestionList";
     }
 
-    @PostMapping ("/add")
-    public void addQuestion(@RequestBody Map<String, String> request) {
+    @GetMapping("/add")
+    public String toAddQuestion(){
+        return"CreatingTest";
+    }
+
+    @PostMapping ("/addQuestion")
+    public String addQuestion(@RequestBody Map<String, String> request, Model model) {
         String Question = request.get("Question");
         String a = request.get("a");
         String b = request.get("b");
@@ -36,21 +52,8 @@ public class QuestionController {
         Question newQuestion = new Question(Question, a, b, c, d, e, ans);
         qService.addQuestion(newQuestion);
 
-        System.out.println("Question is added!");
+        model.addAttribute("Question is added!");
+
+        return "AddQuestion";
     }
-
-
-    public void addQuestion(@RequestParam String Question,
-                            @RequestParam String a,
-                            @RequestParam String b,
-                            @RequestParam String c,
-                            @RequestParam String d,
-                            @RequestParam String e,
-                            @RequestParam String ans){
-        Question newQuestion = new Question(Question,a,b,c,d,e,ans);
-        qService.addQuestion(newQuestion);
-        System.out.println("Question is added!");
-    }
-
-
 }

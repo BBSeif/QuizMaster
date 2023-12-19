@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Question</title>
+</head>
+<body>
+
+<h1>Add Question</h1>
+
+<form id="questionForm">
+  <label for="Question">Question:</label>
+  <input type="text" id="Question" name="Question" required><br>
+
+  <label for="a">Option A:</label>
+  <input type="text" id="a" name="a" required><br>
+
+  <label for="b">Option B:</label>
+  <input type="text" id="b" name="b" required><br>
+
+  <label for="c">Option C:</label>
+  <input type="text" id="c" name="c" required><br>
+
+  <label for="d">Option D:</label>
+  <input type="text" id="d" name="d" required><br>
+
+  <label for="e">Option E:</label>
+  <input type="text" id="e" name="e" required><br>
+
+  <label for="ans">Correct Answer:</label>
+  <input type="text" id="ans" name="ans" required><br>
+
+  <button type="button" onclick="addQuestion()">Add Question</button>
+</form>
+
+<script>
+  function addQuestion() {
+      var formData = {
+          Question: document.getElementById("Question").value,
+          a: document.getElementById("a").value,
+          b: document.getElementById("b").value,
+          c: document.getElementById("c").value,
+          d: document.getElementById("d").value,
+          e: document.getElementById("e").value,
+          ans: document.getElementById("ans").value
+      };
+
+      fetch('/add', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+      })
+      .then(response => response.json())
+      .then(data => {
+          console.log('Success:', data);
+      })
+      .catch((error) => {
+          console.error('Error:', error);
+      });
+  }
+</script>
+
+</body>
+</html>
