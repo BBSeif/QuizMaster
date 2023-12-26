@@ -3,13 +3,14 @@ package kz.App.controller;
 import kz.App.entity.Question;
 import kz.App.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 
-@RestController
+@Controller
 public class QuestionController {
 
     @Autowired
@@ -35,24 +36,26 @@ public class QuestionController {
     }
 
     @GetMapping("/add")
-    public String toAddQuestion(){
-        return"CreatingTest";
+    public String toAddQuestion(Model model){
+        Question question = new Question();
+        model.addAttribute(question);
+        return"AddQuestion";
     }
 
-    @PostMapping ("/addQuestion")
-    public String addQuestion(@RequestBody Map<String, String> request, Model model) {
-        String Question = request.get("Question");
-        String a = request.get("a");
-        String b = request.get("b");
-        String c = request.get("c");
-        String d = request.get("d");
-        String e = request.get("e");
-        String ans = request.get("ans");
 
-        Question newQuestion = new Question(Question, a, b, c, d, e, ans);
+    @PostMapping(value = "/addQuestion")
+    public String addQuestion(@RequestParam("question") String question,
+                              @RequestParam("a") String a,
+                              @RequestParam("b") String b,
+                              @RequestParam("c") String c,
+                              @RequestParam("d") String d,
+                              @RequestParam("e") String e,
+                              @RequestParam("ans") String ans,
+                              Model model) {
+        Question newQuestion = new Question(question, a, b, c, d, e, ans);
         qService.addQuestion(newQuestion);
 
-        model.addAttribute("Question is added!");
+        model.addAttribute("message", "Question is added!");
 
         return "AddQuestion";
     }

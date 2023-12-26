@@ -17,17 +17,53 @@
   <h3>Creating Test</h3>
   <hr>
 
-  <p class="h4 mb-4">Save Question</p>
+<!--  <p class="h2 mb-8">Save Question</p>-->
+
+<!--  <h2>Add Question</h2>-->
+<!--  <form th:action="@{/addQuestion}" th:method="post">-->
+<!--    <label for="Question">Question:</label>-->
+<!--    <input type="text" id="Question" name="Question" required><br>-->
+
+<!--    <label for="a">Option A:</label>-->
+<!--    <input type="text" id="a" name="a" required><br>-->
+
+<!--    <label for="b">Option B:</label>-->
+<!--    <input type="text" id="b" name="b" required><br>-->
+
+<!--    <label for="c">Option C:</label>-->
+<!--    <input type="text" id="c" name="c" required><br>-->
+
+<!--    <label for="d">Option D:</label>-->
+<!--    <input type="text" id="d" name="d" required><br>-->
+
+<!--    <label for="e">Option E:</label>-->
+<!--    <input type="text" id="e" name="e" required><br>-->
+
+<!--    <label for="ans">Correct Answer:</label>-->
+<!--    <input type="text" id="ans" name="ans" required><br>-->
+
+<!--    <button type="submit">Submit</button>-->
+<!--  </form>-->
+
+
+
+
+
+
+
+
+
+
 
   <form action="#" th:action="@{/addQuestion}"
         th:object="${question}" method="POST">
 
     <!--    Add hidden form field to handle the updata   -->
 
-    <input type="hidden" th:field="*{id}">
+<!--    <input type="hidden" th:field="*{id}">-->
 
     <input type="text" th:field="*{question}"
-           class="form-control mb-4 w-25" placeholder="Question">
+           class="form-control mb-4 w-100" placeholder="Question">
 
     <input type="text" th:field="*{a}"
            class="form-control mb-4 w-25" placeholder="A">
@@ -48,7 +84,7 @@
   </form>
 
   <hr>
-  <button type="submit" class="btn btn-primary col-2"  th:href="@{/getAllQuestions}">Back to Question List</button>
+  <button type="submit" class="btn btn-primary col-4"  th:href="@{/getAllQuestions}">Back to Question List</button>
 
 
 </div>
