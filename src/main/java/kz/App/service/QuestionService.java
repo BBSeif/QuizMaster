@@ -32,6 +32,10 @@ public class QuestionService {
     }
 
 
+//    public List<Question> getRandomForQuiz(){
+//
+//
+//    }
 //    public Connection connectToDB(){
 //        Connection connection = null;
 //        try {

@@ -30,27 +30,18 @@
     <thead class="table-dark">
     <tr>
       <th> id </th>
-      <th> Question </th>
-      <th> A </th>
-      <th> B </th>
-      <th> C </th>
-      <th> D </th>
-      <th> E </th>
-      <th> Answer </th>
+      <th> Name </th>
+      <th> Grade </th>
     </tr>
     </thead>
 
     <tbody>
 
-    <tr th:each=" question : ${questions}">
-      <td th:text="${question.id}" />
-      <td th:text="${question.question}" />
-      <td th:text="${question.a}" />
-      <td th:text="${question.b}" />
-      <td th:text="${question.c}" />
-      <td th:text="${question.d}" />
-      <td th:text="${question.e}" />
-      <td th:text="${question.ans}" />
+    <tr th:each=" author : ${authors}">
+      <td th:text="${author.id}" />
+      <td th:text="${author.name}" />
+      <td th:text="${author.grade}" />
+
       <!--				<td th:text="${cars.customer.name}" />-->
 
 <!--      <td>-->

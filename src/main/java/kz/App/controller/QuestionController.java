@@ -7,8 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class QuestionController {
@@ -43,6 +42,19 @@ public class QuestionController {
     }
 
 
+    /**
+     * add question button
+     *
+     * @param question
+     * @param a
+     * @param b
+     * @param c
+     * @param d
+     * @param e
+     * @param ans
+     * @param model
+     * @return
+     */
     @PostMapping(value = "/addQuestion")
     public String addQuestion(@RequestParam("question") String question,
                               @RequestParam("a") String a,
@@ -59,4 +71,36 @@ public class QuestionController {
 
         return "AddQuestion";
     }
+
+    @GetMapping(value = "/quiz")
+    public String startQuiz (Model model){
+        model.addAttribute("questions",selectQuestion(5));
+
+        return "Quiz1";
+    }
+
+    private List<Question> selectQuestion(int number){
+        Random random = new Random();
+        List<Question> questionList = qService.getAllQuestions();
+        int size  = questionList.size();
+        List<Question> quizQuestions = new ArrayList<>();
+        int[] check = new int[number];
+        int randomNumber;
+        for (int i = 0; i < number; i++){
+            while(true){
+                randomNumber = random.nextInt(size-1);
+            if (containsNumber(check, randomNumber)){
+                check[i] = randomNumber;
+                break;}
+            }
+            quizQuestions.add(questionList.get(randomNumber));
+        }
+        return quizQuestions;
+    }
+
+    private boolean containsNumber(int[] array, int target) {
+        for (int num : array) {if (num == target){return false;}}
+        return true;
+    }
+
 }

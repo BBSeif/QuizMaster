@@ -10,7 +10,7 @@ public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "qwestionId")
-    private int id;
+    private long id;
 
     @Column(name = "question")
     private String question;
@@ -33,6 +33,10 @@ public class Question {
     @Column(name = "ans")
     private String ans;
 
+    @ManyToOne
+    @JoinColumn(name = "id")
+    private Author author;
+
     public Question(){}
 
     public Question(String question, String a, String b, String c, String d, String e, String ans) {
@@ -45,11 +49,11 @@ public class Question {
         this.ans = ans;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -57,8 +61,8 @@ public class Question {
         return question;
     }
 
-    public void setQuestion(String qwestion) {
-        this.question = qwestion;
+    public void setQuestion(String question) {
+        this.question = question;
     }
 
     public String getA() {
