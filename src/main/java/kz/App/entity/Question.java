@@ -9,7 +9,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "qwestionId")
+    @Column(name = "id")
     private long id;
 
     @Column(name = "question")
@@ -33,9 +33,11 @@ public class Question {
     @Column(name = "ans")
     private String ans;
 
+
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "author_id")
     private Author author;
+
 
     public Question(){}
 
@@ -111,6 +113,14 @@ public class Question {
 
     public void setAns(String ans) {
         this.ans = ans;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 
     @Override

@@ -10,27 +10,25 @@ public class Author {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "author_id")
     private int id;
 
-    @Column(name = "Name")
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "Class")
+    @Column(name = "grade")
     private String grade;
 
-    @OneToMany(mappedBy = "author")
+
+    @OneToMany(mappedBy = "author" , cascade = CascadeType.ALL)
     private List<Question> questions;
 
     public Author(){}
 
 
-
-    public Author(int id, String name, String grade, List<Question> questions) {
-        this.id = id;
+    public Author(String name, String grade) {
         this.name = name;
         this.grade = grade;
-        this.questions = questions;
     }
 
     public int getId() {
@@ -50,11 +48,11 @@ public class Author {
     }
 
 
-    public String get_Class() {
+    public String getGrade() {
         return grade;
     }
 
-    public void setClass(String grade) {
+    public void setGrade(String grade) {
         this.grade = grade;
     }
 

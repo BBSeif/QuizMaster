@@ -10,6 +10,9 @@
 
 </head>
 <body>
+<div  th:if="${message}" class="alert alert-success">
+  <p th:text="${message}"></p>
+</div>
 <div class="container">
 <h2>Add Question</h2>
 <form action="#" th:action="@{/addQuestion}" th:method="post">
@@ -33,6 +36,16 @@
 
   <label for="ans">Correct Answer:</label>
   <input type="text" id="ans" name="ans" required class="form-control mb-2 w-25" placeholder="ANSWER">
+
+  <label for="author">Author:</label>
+  <select id="author" name="author" required class="form-control mb-2 w-25">
+    <option value="" disabled selected>Select an Author</option>
+    <option th:each="authorOption : ${authors}" th:value="${authorOption.id}" th:text="${authorOption.name}"></option>
+  </select>
+
+  <div th:if="${author != null}">
+    <p th:text="${author.name}"></p>
+  </div>
 
   <button type="submit" class="btn btn-info col-2">Submit</button>
 </form>

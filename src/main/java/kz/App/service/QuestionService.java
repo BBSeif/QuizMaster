@@ -4,6 +4,7 @@ import kz.App.entity.Question;
 import kz.App.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,7 @@ public class QuestionService {
         this.repository = repository;
     }
 
+    @Transactional
     public void addQuestion(Question question){
         repository.save(question);
     }

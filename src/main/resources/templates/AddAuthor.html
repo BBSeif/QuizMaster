@@ -10,6 +10,9 @@
 
 </head>
 <body>
+<div  th:if="${message}" class="alert alert-success">
+  <p th:text="${message}"></p>
+</div>
 <div class="container">
 <h2>Add Author</h2>
 <form action="#" th:action="@{/addAuthor}" th:method="post">
@@ -23,7 +26,7 @@
 </form>
 <hr>
 
-  <a th:href="@{/getAllAuthors}"  class="btn btn-primary btn-sm"> Back to Author List</a>
+  <a th:href="@{/getAuthors}"  class="btn btn-primary btn-sm"> Back to Author List</a>
 
 </div>
 </body>

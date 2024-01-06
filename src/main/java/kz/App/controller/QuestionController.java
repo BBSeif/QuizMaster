@@ -1,6 +1,8 @@
 package kz.App.controller;
 
+import kz.App.entity.Author;
 import kz.App.entity.Question;
+import kz.App.service.AuthorService;
 import kz.App.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +15,9 @@ import java.util.*;
 public class QuestionController {
 
     @Autowired
-    private QuestionService qService;
+    private QuestionService questionService;
+    @Autowired
+    private AuthorService authorService;
 
 //    @GetMapping("/")
 //    public  String mainPage(){
@@ -22,22 +26,24 @@ public class QuestionController {
 
     @GetMapping("/getQuestion")
     public String getQuestion(@PathVariable Long id, Model model) {
-        Question question = qService.getQuestionById(id);
+        Question question = questionService.getQuestionById(id);
         model.addAttribute("questions",question);
         return "QuestionList";
     }
 
     @GetMapping("/getAllQuestions")
     public String getAllQuestions(Model model) {
-        List<Question> questionList = qService.getAllQuestions();
+        List<Question> questionList = questionService.getAllQuestions();
+
+
         model.addAttribute("questions",questionList);
         return "QuestionList";
     }
 
     @GetMapping("/add")
     public String toAddQuestion(Model model){
-        Question question = new Question();
-        model.addAttribute(question);
+        List<Author> authors = authorService.getAllAuthors();
+        model.addAttribute("authors", authors);
         return"AddQuestion";
     }
 
@@ -63,25 +69,30 @@ public class QuestionController {
                               @RequestParam("d") String d,
                               @RequestParam("e") String e,
                               @RequestParam("ans") String ans,
+                              @RequestParam("author") long authorId,
                               Model model) {
+
         Question newQuestion = new Question(question, a, b, c, d, e, ans);
-        qService.addQuestion(newQuestion);
+        Author author1 = authorService.getAuthorById(authorId);
+        newQuestion.setAuthor(author1);
+        questionService.addQuestion(newQuestion);
 
+        List<Author> authors = authorService.getAllAuthors();
         model.addAttribute("message", "Question is added!");
-
-        return "AddQuestion";
+        model.addAttribute("authors", authors );
+        return  "AddQuestion";
     }
 
     @GetMapping(value = "/quiz")
     public String startQuiz (Model model){
-        model.addAttribute("questions",selectQuestion(5));
+        model.addAttribute("questions",selectQuestion(3));
 
-        return "Quiz1";
+        return "Quiz2";
     }
 
     private List<Question> selectQuestion(int number){
         Random random = new Random();
-        List<Question> questionList = qService.getAllQuestions();
+        List<Question> questionList = questionService.getAllQuestions();
         int size  = questionList.size();
         List<Question> quizQuestions = new ArrayList<>();
         int[] check = new int[number];
