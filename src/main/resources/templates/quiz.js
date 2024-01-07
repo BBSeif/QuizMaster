@@ -1,90 +1,105 @@
-// Sample quiz data (questions and correct answers)
-const quizData = /* Insert your server response here */;
-
-// Get HTML elements
-const questionContainer = document.getElementById('question-container');
-const optionsContainer = document.getElementById('options-container');
-const resultContainer = document.getElementById('result-container');
-const submitButton = document.getElementById('submit-button');
-
-// Initialize quiz
-let currentQuestion = 0;
-loadQuestion();
-
-// Function to load a question
-function loadQuestion() {
-    const currentQuizData = quizData[currentQuestion];
-
-    // Check if all questions are answered
-    if (!currentQuizData) {
-        endQuiz();
-        return;
+const questions = [
+    {
+        question: "Which is largest animal in the world?",
+        answers: [
+            {text: "Shark", correct: false},
+            {text: "Blue whale", correct: false},
+            {text: "Elephant", correct: true},
+            {text: "Giraffe", correct: false},
+            {text: "Zebra", correct: false},
+        ]
+    },
+    {
+        question: "Which is largest hh animal in the world?",
+        answers: [
+            {text: "Sharhk", correct: false},
+            {text: "Blue whale", correct: false},
+            {text: "Elephant", correct: true},
+            {text: "Giraffe", correct: false},
+            {text: "Zebra", correct: false},
+        ]
     }
+];
 
-    questionContainer.innerText = currentQuizData.question;
+const questionElement = document.getElementById("question");
+const answerButtons = document.getElementById("answer-buttons");
+const nextButton = document.getElementById("next-btn");
 
-    // Clear options container
-    optionsContainer.innerHTML = '';
+let currentQuestionIndex = 0;
+let score = 0;
 
-    // Create options
-    currentQuizData.options.forEach((option, index) => {
-        const optionElement = document.createElement('div');
-        optionElement.classList.add('option');
-        optionElement.innerText = option;
-        optionElement.addEventListener('click', () => selectOption(index));
-        optionsContainer.appendChild(optionElement);
-    });
-
-    // Enable the submit button
-    submitButton.disabled = false;
+function startQuiz(){
+    currentQuestionIndex = 0;
+    score = 0;
+    nextButton.innerHTML = "Next";
+    showQuestion();
 }
 
-// Function to handle option selection
-function selectOption(selectedIndex) {
-    const currentQuizData = quizData[currentQuestion];
-    const selectedOption = currentQuizData.options[selectedIndex];
+function showQuestion(){
+    resetState();
+    let currentQuestion = questions[currentQuestionIndex];
+    let questionNo = currentQuestionIndex + 1;
+    questionElement.innerHTML = questionNo + ". " + currentQuestion.question;
 
-    // Add styling to indicate selection
-    document.querySelectorAll('.option').forEach((option, index) => {
-        option.classList.remove('selected');
-        if (index === selectedIndex) {
-            option.classList.add('selected');
+    currentQuestion.answers.forEach(answer => {
+        const button = document.createElement("button");
+        button.innerHTML = answer.text;
+        button.classList.add("btn");
+        answerButtons.appendChild(button);
+        if(answer.correct){
+            button.dataset.correct = answer.correct;
         }
+        button.addEventListener("click", selectAnsware);
     });
-
-    // Store selected answer
-    currentQuizData.selectedAnswer = selectedOption;
 }
 
-// Function to submit the answer for the current question
-function submitAnswer() {
-    const currentQuizData = quizData[currentQuestion];
-
-    if (currentQuizData.selectedAnswer === undefined) {
-        alert('Please select an answer before submitting.');
-        return;
+function resetState(){
+    nextButton.style.display = "none";
+    while(answerButtons.firstChild){
+        answerButtons.removeChild(answerButtons.firstChild)
     }
-
-    // Check if the answer is correct
-    const isCorrect = currentQuizData.selectedAnswer === currentQuizData.correctAnswer;
-
-    // Display result
-    resultContainer.innerText = isCorrect ? 'Correct!' : 'Incorrect. The correct answer is: ' + currentQuizData.correctAnswer;
-
-    // Disable the submit button for this question
-    submitButton.disabled = true;
-
-    // Move to the next question or end the quiz
-    setTimeout(() => {
-        resultContainer.innerText = '';
-        currentQuestion++;
-        loadQuestion();
-    }, 2000);
 }
 
-// Function to end the quiz
-function endQuiz() {
-    questionContainer.innerText = 'Quiz completed!';
-    optionsContainer.innerHTML = '';
-    submitButton.style.display = 'none';
+function selectAnsware(e){
+    const selectBtn = e.target;
+    const isCorrect = selectBtn.dataset.correct === "true";
+    if(isCorrect){
+        selectBtn.classList.add("correct");
+        score++;
+    } else {
+        selectBtn.classList.add("incorrect");
+    }
+    Array.from(answerButtons.children).forEach(button => {
+        if(button.dataset.correct === "true"){
+            button.classList.add("correct");
+        }
+        button.disabled = true;
+    });
+    nextButton.style.display = "block";
 }
+
+function showScore(){
+    resetState();
+    questionElement.innerHTML = "Your score : " + score + " from " + questions.length +" !";
+    nextButton.innerHTML = "Try Again";
+    nextButton.style.display = "block";
+}
+
+function handleNextButton(){
+    currentQuestionIndex++;
+    if(currentQuestionIndex < question.length){
+        showQuestion();
+    } else {
+        showScore();
+    }
+}
+
+nextButton.addEventListener("click", ()=>{
+    if(currentQuestionIndex < questions.length){
+        handleNextButton();
+    } else {
+        startQuiz();
+    }
+});
+
+startQuiz();
