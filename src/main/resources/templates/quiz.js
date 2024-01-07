@@ -1,6 +1,6 @@
 const questions = [
     {
-        question: "Which is largest animal in the world?",
+        question: " Which is largest animal in the world?",
         answers: [
             {text: "Shark", correct: false},
             {text: "Blue whale", correct: false},
@@ -10,7 +10,7 @@ const questions = [
         ]
     },
     {
-        question: "Which is largest hh animal in the world?",
+        question: " Which is largest hh animal in the world?",
         answers: [
             {text: "Sharhk", correct: false},
             {text: "Blue whale", correct: false},
@@ -20,6 +20,7 @@ const questions = [
         ]
     }
 ];
+
 
 const questionElement = document.getElementById("question");
 const answerButtons = document.getElementById("answer-buttons");
@@ -31,7 +32,7 @@ let score = 0;
 function startQuiz(){
     currentQuestionIndex = 0;
     score = 0;
-    nextButton.innerHTML = "Next";
+    nextButton.innerHTML = "Келесі сұрақ";
     showQuestion();
 }
 
@@ -80,14 +81,14 @@ function selectAnsware(e){
 
 function showScore(){
     resetState();
-    questionElement.innerHTML = "Your score : " + score + " from " + questions.length +" !";
-    nextButton.innerHTML = "Try Again";
+    questionElement.innerHTML = questions.length + " сұрақтың " + score + " дұрыс " + " !";
+    nextButton.innerHTML = "Қайта тапсыру";
     nextButton.style.display = "block";
 }
 
 function handleNextButton(){
     currentQuestionIndex++;
-    if(currentQuestionIndex < question.length){
+    if(currentQuestionIndex < questions.length){
         showQuestion();
     } else {
         showScore();
