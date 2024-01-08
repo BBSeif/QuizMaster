@@ -1,5 +1,6 @@
 package kz.App.controller;
 
+import kz.App.entity.Answer;
 import kz.App.entity.Author;
 import kz.App.entity.Question;
 import kz.App.service.AuthorService;
@@ -44,35 +45,52 @@ public class QuestionController {
     public String toAddQuestion(Model model){
         List<Author> authors = authorService.getAllAuthors();
         model.addAttribute("authors", authors);
+//        Question question = new Question();
+//        List<Answer> answers = new ArrayList<>();
+//
+//
+//        model.addAttribute("question", new Question());
+//        model.addAttribute("answers", answers);
         return"AddQuestion";
     }
 
 
-    /**
-     * add question button
-     *
-     * @param question
-     * @param a
-     * @param b
-     * @param c
-     * @param d
-     * @param e
-     * @param ans
-     * @param model
-     * @return
-     */
+
     @PostMapping(value = "/addQuestion")
-    public String addQuestion(@RequestParam("question") String question,
+    public String addQuestion( @RequestParam("question") String question,
                               @RequestParam("a") String a,
-                              @RequestParam("b") String b,
-                              @RequestParam("c") String c,
-                              @RequestParam("d") String d,
-                              @RequestParam("e") String e,
-                              @RequestParam("ans") String ans,
+                               @RequestParam(name = "checkA",defaultValue = "false") boolean checkA,
+                               @RequestParam("b") String b,
+                               @RequestParam(name = "checkB",defaultValue = "false") boolean checkB,
+                               @RequestParam("c") String c,
+                               @RequestParam(name = "checkC",defaultValue = "false") boolean checkC,
+                               @RequestParam("d") String d,
+                               @RequestParam(name = "checkD",defaultValue = "false") boolean checkD,
+                               @RequestParam("e") String e,
+                               @RequestParam(name = "checkE",defaultValue = "false") boolean checkE,
                               @RequestParam("author") long authorId,
                               Model model) {
 
-        Question newQuestion = new Question(question, a, b, c, d, e, ans);
+        Question newQuestion = new Question();
+        newQuestion.setQuestion(question);
+        List<Answer> answers = new ArrayList<>();
+
+        answers.add(new Answer(a, checkA));
+        answers.add(new Answer(b, checkB));
+        answers.add(new Answer(c, checkC));
+        answers.add(new Answer(d, checkD));
+        answers.add(new Answer(e, checkE));
+
+            for (Answer answer : answers) {
+                if (answer.getCorrect() == null) {
+                    // Checkbox not checked, set correct to false
+                    answer.setCorrect(false);
+                }
+            }
+
+
+        newQuestion.setAnswers(answers);
+
         Author author1 = authorService.getAuthorById(authorId);
         newQuestion.setAuthor(author1);
         questionService.addQuestion(newQuestion);
@@ -80,6 +98,7 @@ public class QuestionController {
         List<Author> authors = authorService.getAllAuthors();
         model.addAttribute("message", "Question is added!");
         model.addAttribute("authors", authors );
+//        model.addAttribute("question", new Question());
         return  "AddQuestion";
     }
 
