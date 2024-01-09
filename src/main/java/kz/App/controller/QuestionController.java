@@ -35,8 +35,6 @@ public class QuestionController {
     @GetMapping("/getAllQuestions")
     public String getAllQuestions(Model model) {
         List<Question> questionList = questionService.getAllQuestions();
-
-
         model.addAttribute("questions",questionList);
         return "QuestionList";
     }
@@ -45,12 +43,6 @@ public class QuestionController {
     public String toAddQuestion(Model model){
         List<Author> authors = authorService.getAllAuthors();
         model.addAttribute("authors", authors);
-//        Question question = new Question();
-//        List<Answer> answers = new ArrayList<>();
-//
-//
-//        model.addAttribute("question", new Question());
-//        model.addAttribute("answers", answers);
         return"AddQuestion";
     }
 

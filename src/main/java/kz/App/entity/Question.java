@@ -17,11 +17,11 @@ public class Question {
     @Column(name = "question")
     private String question;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "question_id")
     private List<Answer> answers;
-
-
 
     @ManyToOne
     @JoinColumn(name = "author_id")
@@ -30,11 +30,19 @@ public class Question {
 
     public Question(){}
 
-    public Question(String question, List<Answer> answers) {
+    public Question(String question, List<Answer> answers, Author author) {
         this.question = question;
         this.answers = answers;
+        this.author = author;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getQuestion() {
         return question;
@@ -59,4 +67,5 @@ public class Question {
     public void setAuthor(Author author) {
         this.author = author;
     }
+
 }

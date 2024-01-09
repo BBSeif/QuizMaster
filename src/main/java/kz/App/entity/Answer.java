@@ -9,23 +9,23 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+//    @Column
     private String text;
-    @Column(columnDefinition = "BOOLEAN")
+//    @Column(columnDefinition = "BOOLEAN")
     private Boolean correct;
 
-    // Constructors, getters, and setters
+//    @ManyToOne
+//    @JoinColumn(name = "question_id")
+//    private Question question;
 
-    // Default constructor
     public Answer() {
     }
 
-    // Parameterized constructor
     public Answer(String text, boolean correct) {
         this.text = text;
         this.correct = correct;
     }
 
-    // Getters and setters
 
     public String getText() {
         return text;

@@ -66,10 +66,7 @@ public class Author {
 
     @Override
     public String toString() {
-        return "Author{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", grade='" + grade + '\'' +
-                '}';
+        return "Аты-жөні : " + name +
+                ", сыныбы : " + grade;
     }
 }
