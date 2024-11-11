@@ -1,11 +1,13 @@
 package kz.App.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
 @Table(name = "question")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Question {
 
 

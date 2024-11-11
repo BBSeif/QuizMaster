@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Quiz Page</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <h1>Сұрақтар</h1>
+    <div class="quiz">
+
+        <ol type="1">
+            <li th:each="question : ${questions}" ><h2 id="question" th:text="${question.question}"></h2></li>
+            <div id="answer-buttons">
+                <ol  type="a">
+                    <li th:each="answer : ${question.answers}" ><button class="btn" th:text="${answer.text}"></button></li>
+                </ol>
+            </div>
+        </ol>
+    </div>
+  </div>
+
+<!-- <script src="quiz.js"></script> -->
+</body>
+</html>

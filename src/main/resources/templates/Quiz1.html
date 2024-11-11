@@ -1,95 +1,109 @@
-<!DOCTYPE HTML>
-<html xmlns:th = "http://www.thymeleaf.org">
-
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-
-    <title>Company Directory</title>
+    <!-- Add your head content here -->
 </head>
-
 <body>
-<a th:href="@{/}"
-   class="btn btn-primary btn-sm mb-3">
-    << Back
-</a>
 
-<div class="container">
+<div id="question" th:text="${questions[currentQuestionIndex].question}"></div>
+<div id="answer-buttons"></div>
+<button id="next-btn" onclick="handleNextButton()">Келесі сұрақ</button>
 
-<h2>Quiz</h2>
+<script th:inline="javascript">
+    var questions = /*[[${questions}]]*/ []; // Initialize with the fetched questions
 
-<form action="/submit" method="post">
+    async function getQuestionsFromApi() {
+        try {
+            const response = await fetch('/quiz'); // Use the correct API endpoint
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching questions:', error.message);
+        }
+    }
 
-    <div th:each="question, iterStatus : ${questions}" class="form-control mb-3 w-50">
+    async function startQuiz() {
+        // Fetch questions from the API
+        questions = await getQuestionsFromApi();
 
-        <p th:text="${iterStatus.count} +'. '+ ${question.question}"></p>
-        <p th:text="'a) '+${question.a}"></p>
-        <p th:text="'b) '+${question.b}"></p>
-        <p th:text="'c) '+${question.c}"></p>
-        <p th:text="'d) '+${question.d}"></p>
-        <p th:text="'e) '+${question.e}"></p>
-        </p>
-
-
-        <input type="text" name="answer" th:placeholder="'Enter answer for question ' + ${iterStatus.count}" required><br>
-    </div>
-
-    <button type="submit" class="btn btn-info col-2">Submit</button>
-</form>
-
-</div>
-
-<!--<div class="container">-->
-
-<!--    <h3>Company Directory</h3>-->
-<!--    <hr>-->
-
-<!--    &lt;!&ndash;	Add a button   &ndash;&gt;-->
-<!--    <a th:href="@{/}"-->
-<!--       class="btn btn-primary btn-sm mb-3">-->
-<!--        << Back-->
-<!--    </a>-->
+        currentQuestionIndex = 0;
+        score = 0;
+        nextButton.innerHTML = 'Келесі сұрақ';
+        showQuestion();
+    }
 
 
-<!--    <table class="table table-bordered table-striped">-->
-<!--        <thead class="table-dark">-->
-<!--        <tr>-->
-<!--            <th> id </th>-->
-<!--            <th> Question </th>-->
-<!--            <th> A </th>-->
-<!--            <th> B </th>-->
-<!--            <th> C </th>-->
-<!--            <th> D </th>-->
-<!--            <th> E </th>-->
-<!--            <th> Answer </th>-->
-<!--        </tr>-->
-<!--        </thead>-->
+    function showQuestion(){
+    resetState();
+    let currentQuestion = questions[currentQuestionIndex];
+    let questionNo = currentQuestionIndex + 1;
+    questionElement.innerHTML = questionNo + ". " + currentQuestion.question;
 
-<!--        <tbody>-->
+    currentQuestion.answers.forEach(answer => {
+        const button = document.createElement("button");
+        button.innerHTML = answer.text;
+        button.classList.add("btn");
+        answerButtons.appendChild(button);
+        if(answer.correct){
+            button.dataset.correct = answer.correct;
+        }
+        button.addEventListener("click", selectAnsware);
+    });
+}
 
-<!--        <tr th:each=" question : ${questions}">-->
-<!--            <td th:text="${question.id}" />-->
-<!--            <td th:text="${question.question}" />-->
-<!--            <td th:text="${question.a}" />-->
-<!--            <td th:text="${question.b}" />-->
-<!--            <td th:text="${question.c}" />-->
-<!--            <td th:text="${question.d}" />-->
-<!--            <td th:text="${question.e}" />-->
-<!--            <td th:text="${question.ans}" />-->
+function resetState(){
+    nextButton.style.display = "none";
+    while(answerButtons.firstChild){
+        answerButtons.removeChild(answerButtons.firstChild)
+    }
+}
 
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--    </table>-->
+function selectAnsware(e){
+    const selectBtn = e.target;
+    const isCorrect = selectBtn.dataset.correct === "true";
+    if(isCorrect){
+        selectBtn.classList.add("correct");
+        score++;
+    } else {
+        selectBtn.classList.add("incorrect");
+    }
+    Array.from(answerButtons.children).forEach(button => {
+        if(button.dataset.correct === "true"){
+            button.classList.add("correct");
+        }
+        button.disabled = true;
+    });
+    nextButton.style.display = "block";
+}
 
-<!--    <a th:href="@{/add}"-->
-<!--       class="btn btn-info btn-sm">-->
-<!--        Add Question</a>-->
+function showScore(){
+    resetState();
+    questionElement.innerHTML = questions.length + " сұрақтың " + score + " дұрыс " + " !";
+    nextButton.innerHTML = "Қайта тапсыру";
+    nextButton.style.display = "block";
+}
 
-<!--</div>-->
+function handleNextButton(){
+    currentQuestionIndex++;
+    if(currentQuestionIndex < questions.length){
+        showQuestion();
+    } else {
+        showScore();
+    }
+}
+
+nextButton.addEventListener("click", ()=>{
+    if(currentQuestionIndex < questions.length){
+        handleNextButton();
+    } else {
+        startQuiz();
+    }
+});
+
+startQuiz();
+</script>
 
 </body>
 </html>

@@ -96,9 +96,8 @@ public class QuestionController {
 
     @GetMapping(value = "/quiz")
     public String startQuiz (Model model){
-        model.addAttribute("questions",selectQuestion(3));
-
-        return "Quiz2";
+        model.addAttribute("questions",selectQuestion(1));
+        return "Quiz3";
     }
 
     private List<Question> selectQuestion(int number){
